@@ -10,6 +10,14 @@ exports.createDonation = async (req, res) => {
   }
 
   try {
+    // Log the user object to debug issues with the token
+    console.log('User object from request:', req.user);
+
+    // Ensure the user object is valid
+    if (!req.user || !req.user.id) {
+      return res.status(403).json({ msg: 'User not authenticated. Please log in.' });
+    }
+
     // Create a new donation
     const newDonation = new Donation({
       itemName,
@@ -28,10 +36,7 @@ exports.createDonation = async (req, res) => {
   }
 };
 
-
-// without location
-
-
+// Get Donations by Region (ignoring location for now)
 exports.getDonationsByRegion = async (req, res) => {
   try {
     const donations = await Donation.find({ status: 'available' }); // Ignore location for now
@@ -41,28 +46,3 @@ exports.getDonationsByRegion = async (req, res) => {
     return res.status(500).json({ msg: 'Server error', error: error.message });
   }
 };
-
-/*
-
-// Get Donations by Region
-exports.getDonationsByRegion = async (req, res) => {
-  const location = req.query.location;
-
-  console.log('Received location:', location); // Log the received location
-
-  // Optional: Validate location parameter
-  if (!location) {
-    console.log('Location is not defined.'); // Log if location is not provided
-    return res.status(400).json({ msg: 'Location query parameter is required.' });
-  }
-
-  try {
-    const donations = await Donation.find({ location, status: 'available' });
-    console.log('Donations found:', donations); // Log the found donations
-    return res.json(donations);
-  } catch (error) {
-    console.error('Error fetching donations by region:', error); // Log the error
-    return res.status(500).json({ msg: 'Server error', error: error.message });
-  }
-};
-*/

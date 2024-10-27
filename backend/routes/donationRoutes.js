@@ -4,6 +4,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 const router = express.Router();
 const Donation = require('../models/Donation');
 
+// Route to create a new donation
 router.post('/donate', authMiddleware, createDonation);
 
 // Get all donations with donor details
