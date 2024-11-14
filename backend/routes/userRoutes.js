@@ -7,6 +7,7 @@ const router = express.Router();
 // Route to get user profile by email
 router.get('/users/:email', async (req, res) => {
     const email = req.params.email;
+    console.log(email)
     try {
         const user = await User.findOne({ email }); // Find user by email
         if (!user) {
